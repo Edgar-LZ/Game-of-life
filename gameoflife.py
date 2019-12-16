@@ -8,7 +8,7 @@ class App(Tk):
     def __init__(self, *args,**kwargs):
         Tk.__init__(self,*args,**kwargs)
         #useful variables
-        self.n = 40 # number of cells = n*n
+        self.n = 20 # number of cells = n*n
         self.a = np.zeros((self.n, self.n))#array with cell information
         self.b = np.zeros((self.n, self.n))
         self.cells = {}#dictionary containing the visual cell objects
@@ -31,7 +31,10 @@ class App(Tk):
         self.start.grid(row=0, column=0, sticky=(W))
         self.stop = ttk.Button(self.controls, text='Stop',
                 command=self.stop_game)
-        self.stop.grid(row=0, column=1, sticky=(E))
+        self.stop.grid(row=0, column=2, sticky=(E))
+        self.random = ttk.Button(self.controls, text='random',
+                command=self.randgen)
+        self.random.grid(row=0, column=1, sticky=(E,W))
         #Size Configuration
         self.columnconfigure(0, weight=1)
         self.rowconfigure(0, weight=1)
@@ -39,6 +42,8 @@ class App(Tk):
         self.content.rowconfigure(0, weight=4)
         self.content.rowconfigure(1, weight=1)
         self.controls.columnconfigure(0,weight=1)
+        self.controls.columnconfigure(1,weight=1)
+        self.controls.columnconfigure(2,weight=1)
         self.controls.rowconfigure(0,weight=1)
 
     def draw(self, event=None):
@@ -132,6 +137,16 @@ class App(Tk):
                     + self.a[row+1, col-1] + self.a[row+1, col]
         return count
 
+    def randgen(self):
+        n = self.n
+        cellstogen = np.random.randint(0, int(n*n/2))
+        self.b = np.zeros((n, n))
+        for cell in range(cellstogen):
+            i = np.random.randint(0, n-1)
+            j = np.random.randint(0, n-1)
+            self.b[i,j] = 1
+        self.a = self.b
+        self.draw()
 
 
 if __name__ == '__main__':
